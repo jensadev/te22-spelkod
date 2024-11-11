@@ -4,11 +4,12 @@ export default class Player extends GameObject {
   constructor(x, y, width, height, color, game) {
     super(x, y, width, height, color)
     this.game = game
+    this.grounded = false
 
     this.speedX = 0
     this.speedY = 0
     this.maxSpeedX = 1
-    this.maxSpeedY = 5
+    this.jumpSpeed = 20
     this.color = "255, 0, 0"
   }
 
@@ -33,18 +34,28 @@ export default class Player extends GameObject {
       this.speedX = 0
     }
 
+    if (this.game.input.keys.has("ArrowUp") && this.grounded) {
+      this.speedY = -this.jumpSpeed
+      this.grounded = false
+    }
     
-    console.log(this.y)
-    if (this.y > 320) {
+    if (this.grounded) {
       this.speedY = 0
-    } else if (this.y < 320) {
-      this.speedY += 5
+    } else {
+      this.speedY += 1
     }
-    if (this.game.input.keys.has("ArrowUp")) {
-      this.speedY -= this.maxSpeedY
-    }
+
+    console.log(this.speedX)
+
     this.y += this.speedY
     this.x += this.speedX
+
+    // Simulate ground plane
+    if (this.y > 320) {
+      this.y = 320
+      this.speedY = 0
+      this.grounded = true
+    }
 
   }
 
@@ -53,5 +64,6 @@ export default class Player extends GameObject {
     ctx.fillRect(this.x - this.speedX, this.y, this.width, this.height)
     ctx.fillStyle = `rgba(255, 0, 0, 1)`
     ctx.fillRect(this.x, this.y, this.width, this.height)
+
   }
 }
