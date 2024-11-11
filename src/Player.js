@@ -19,6 +19,9 @@ export default class Player extends GameObject {
     if (this.game.input.keys.has("ArrowRight")) {
       this.speedX += this.maxSpeedX
     }
+    if (this.game.input.keys.has("ArrowRight") && this.game.input.keys.has("ArrowLeft")) {
+      this.speedX = 0
+    }
     if (!this.game.input.keys.has("ArrowRight") && !this.game.input.keys.has("ArrowLeft")) {
       this.speedX = 0
     }
